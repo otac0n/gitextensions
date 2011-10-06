@@ -4,6 +4,7 @@ using System.IO;
 using System.Windows.Forms;
 using GitCommands;
 using ResourceManager.Translation;
+using System.Text;
 
 namespace GitUI
 {
@@ -23,7 +24,7 @@ namespace GitUI
             {
                 if (File.Exists(Settings.WorkingDir + ".gitattributes"))
                 {
-                    _NO_TRANSLATE_GitAttributesText.ViewFile(Settings.WorkingDir + ".gitattributes");
+                    _NO_TRANSLATE_GitAttributesText.ViewFile(Settings.WorkingDir + ".gitattributes", Encoding.Default);
                 }
 
             }
@@ -44,7 +45,7 @@ namespace GitUI
 
                         using (var file = File.OpenWrite(x))
                         {
-                            var contents = Settings.Encoding.GetBytes(this.GitAttributesFile);
+                            var contents = Encoding.Default.GetBytes(this.GitAttributesFile);
                             file.Write(contents, 0, contents.Length);
                         }
 

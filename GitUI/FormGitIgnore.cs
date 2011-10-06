@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 using GitCommands;
 using ResourceManager.Translation;
@@ -29,7 +30,7 @@ namespace GitUI
             {
                 if (File.Exists(Settings.WorkingDir + ".gitignore"))
                 {
-                    _NO_TRANSLATE_GitIgnoreEdit.ViewFile(Settings.WorkingDir + ".gitignore");
+                    _NO_TRANSLATE_GitIgnoreEdit.ViewFile(Settings.WorkingDir + ".gitignore", Encoding.Default);
                 }
             }
             catch (Exception ex)
@@ -56,7 +57,7 @@ namespace GitUI
 
                             using (var file = File.OpenWrite(x))
                             {
-                                var contents = Settings.Encoding.GetBytes(this.GitIgnoreFile);
+                                var contents = Encoding.Default.GetBytes(this.GitIgnoreFile);
                                 file.Write(contents, 0, contents.Length);
                             }
 

@@ -62,7 +62,7 @@ namespace GitUI.Editor
             this.HotkeysEnabled = true;
             this.Hotkeys = HotkeySettingsManager.LoadHotkeys(HotkeySettingsName);
 
-            ContextMenu.Opening += ContextMenu_Opening; 
+            ContextMenu.Opening += ContextMenu_Opening;
         }
 
         protected override void OnLoad(EventArgs e)
@@ -107,7 +107,7 @@ namespace GitUI.Editor
         {
             if (string.IsNullOrEmpty(text))
             {
-                ToolStripSeparator separator =new ToolStripSeparator();
+                ToolStripSeparator separator = new ToolStripSeparator();
                 ContextMenu.Items.Add(separator);
                 return separator;
             }
@@ -237,10 +237,14 @@ namespace GitUI.Editor
             _currentScrollPos = 0;
         }
 
-
         public void ViewFile(string fileName)
         {
-            ViewItem(fileName, () => GetImage(fileName), () => GetFileText(fileName));
+            ViewFile(fileName, Settings.Encoding);
+        }
+
+        public void ViewFile(string fileName, Encoding encoding)
+        {
+            ViewItem(fileName, () => GetImage(fileName), () => GetFileText(fileName, encoding));
         }
 
         public string GetText()
@@ -408,7 +412,7 @@ namespace GitUI.Editor
             return new MemoryStream(new BinaryReader(stream).ReadBytes((int)stream.Length));
         }
 
-        private static string GetFileText(string fileName)
+        private static string GetFileText(string fileName, Encoding encoding)
         {
             string path;
             if (File.Exists(fileName))
@@ -416,7 +420,7 @@ namespace GitUI.Editor
             else
                 path = GitCommands.Settings.WorkingDir + fileName;
 
-            return !File.Exists(path) ? null : FileReader.ReadFileContent(path, GitCommands.Settings.Encoding);
+            return !File.Exists(path) ? null : FileReader.ReadFileContent(path, encoding);
         }
 
         private void ResetForImage()
@@ -715,7 +719,8 @@ namespace GitUI.Editor
             return (_internalFileViewer.GetText() != null && _internalFileViewer.GetText().Contains("@@"));
         }
 
-        public void SetFileLoader(Func<bool, Tuple<int, string>> fileLoader){
+        public void SetFileLoader(Func<bool, Tuple<int, string>> fileLoader)
+        {
             _internalFileViewer.SetFileLoader(fileLoader);
         }
 
